@@ -27,7 +27,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://api.agify.io?name=meelad",
+					"raw": "https://api.agify.io?name=Peter",
 					"protocol": "https",
 					"host": [
 						"api",
@@ -37,7 +37,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "meelad"
+							"value": "Peter"
 						}
 					]
 				}
