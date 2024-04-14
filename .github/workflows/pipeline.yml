@@ -84,6 +84,7 @@ jobs:
 
       - name: Run system tests
         run: |
+          newman run SpringBoot_ArgoCD\src\test\tests\system\tests.json
           # Add the execution of further tests here 
           # You may use Newman for system testing
           # Example:
@@ -114,15 +115,3 @@ jobs:
           git push
   
 
-      
-  Newman-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run system tests
-        run: newman run SpringBoot_ArgoCD\src\test\tests\system\tests.json
