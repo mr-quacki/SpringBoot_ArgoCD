@@ -28,6 +28,11 @@ jobs:
       - name: Run integration tests
         run: ./gradlew test --tests '*.*Integration*'
 
+      - name: deine mudda
+        run:
+         npm install -g newman
+         newman run ../src/test/tests/system/tests.json
+
   deploy-to-staging-and-run-further-tests:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/release' || (github.event_name == 'pull_request' && github.base_ref == 'release' && github.head_ref == 'main')
@@ -82,13 +87,11 @@ jobs:
           # Example:
           # argocd app wait <APP_NAME> --timeout 300
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      
 
       - name: Run system tests
         run: |
-          npm install -g newman
-          newman run ../src/test/tests/system/tests.json
+
         # Add the execution of further tests here
         # You may use Newman for system testing
         # Example:
