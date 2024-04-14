@@ -92,6 +92,7 @@ jobs:
   deploy-to-production:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    needs: deploy-to-staging-and-run-further-tests  # Wait for staging deployment
     steps:
       - name: Checkout GitOps repository
         uses: actions/checkout@v4
@@ -100,25 +101,29 @@ jobs:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
-      - name: Update image tag with version from staging in production values.yml
+      - name: Prepare Pull Request for Production Deployment
         run: |
+          # Generate the content for the Pull Request description
+          # This could include details about the version being deployed
+          # and any other relevant information.
+          description=$(echo "Deploy version from staging to production.")
+          
+          # Create a new branch with the updated values.yml file
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
+          git checkout -b production/deploy-$version
+          
+          # Update image tag with version from staging in production values.yml
           sed -i "s/tag: .*/tag: $version/" values_production.yml
-
-      - name: Create branch for pull request
-        run: |
-          git checkout -b update-production-values
+          
+          # Add, commit, and push changes to a new branch
           git add values_production.yml
-          git commit -m "Update production values with version $version"
-          git push origin update-production-values
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git commit --allow-empty -m "Deploy $version to production"
+          git push origin production/deploy-$version
+          
+          # Create a Pull Request targeting the main branch
+          gh pr create --title "Deploy $version to Production" --body "$description" --head production/deploy-$version
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-production-values
-          title: "Update production values with version $version"
-          body: |
-            This pull request updates the production values with the latest version from staging.
-            Please review and merge to deploy to production.
+      # The deployment to production happens after manual review and merge of the Pull Request
   
