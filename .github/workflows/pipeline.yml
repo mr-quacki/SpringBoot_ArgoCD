@@ -109,12 +109,19 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
+          git add values_production.yml
+          git commit -m "Update production values with version $version"
+          git push origin main
+
+      - name: Fetch latest changes from remote repository
+        run: git fetch origin
+
+      - name: Merge remote changes into local branch
+        run: git merge origin/main
 
       - name: Create branch for pull request
         run: |
           git checkout -b update-production-values
-          git add values_production.yml
-          git commit -m "Update production values with version $version"
           git push origin update-production-values
 
       - name: Create Pull Request
@@ -127,4 +134,5 @@ jobs:
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+
       
