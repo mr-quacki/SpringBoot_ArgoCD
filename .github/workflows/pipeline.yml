@@ -28,6 +28,11 @@ jobs:
       - name: Run integration tests
         run: ./gradlew test --tests '*.*Integration*'
 
+      - name: deine mudda
+        run: |
+         npm install -g newman
+         newman run ./src/test/tests/system/age_of_a_person_based_on_their_name.json
+
   deploy-to-staging-and-run-further-tests:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/release' || (github.event_name == 'pull_request' && github.base_ref == 'release' && github.head_ref == 'main')
