@@ -118,3 +118,4 @@ jobs:
           body: |
             Dieser Pull Request enthält Aktualisierungen für das Produktions-Deployment.
             Bitte überprüfen und zusammenführen, wenn alles gut aussieht.
+          reviewers: Trojka2000
