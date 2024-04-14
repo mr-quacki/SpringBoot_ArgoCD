@@ -110,29 +110,19 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
           git add values_production.yml
-          git commit -m "Update production values with version $version"
-          git push origin main
-
-      - name: Fetch latest changes from remote repository
-        run: git fetch origin
-
-      - name: Merge remote changes into local branch
-        run: git merge origin/main --no-edit
-
-      - name: Create branch for pull request
-        run: |
-          git checkout -b update-production-values
-          git push origin update-production-values
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          branch: update-production-values
-          title: "Update production values with version $version"
-          body: |
-            This pull request updates the production values with the latest version from staging.
-            Please review and merge to deploy to production.
+          git commit --allow-empty -m "Deploy $version to production"
+          git push
   
 
       
+  Newman-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run system tests
+        run: newman run SpringBoot_ArgoCD\src\test\tests\system\tests.json
