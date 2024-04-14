@@ -113,7 +113,6 @@ jobs:
       - name: Commit changes to a new branch
         run: |
          
-         git config --global user.name "github-actions"
          git checkout -b deploy-${{ github.run_number }}
          git add values_production.yml
          git commit -m "Deploy $version to production"
