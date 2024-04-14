@@ -77,17 +77,22 @@ jobs:
 
       - name: Wait for ArgoCD deployment
         run: |
-          # Add commands to check the status of ArgoCD deployment here
-          # You may use ArgoCD CLI or API to check the deployment status
-          # Example:
-          # argocd app wait <APP_NAME> --timeout 300
+        # Add commands to check the status of ArgoCD deployment here
+        # You may use ArgoCD CLI or API to check the deployment status
+        # Example:
+        # argocd app wait <APP_NAME> --timeout 300
+
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Run system tests
         run: |
-          # Add the execution of further tests here 
-          # You may use Newman for system testing
-          # Example:
-          # newman run collection.json -e environment.json
+         npm install -g newman
+         newman run ./src/test/tests/system/age_of_a_person_based_on_their_name.json
+        # Add the execution of further tests here
+        # You may use Newman for system testing
+        # Example:
+        # newman run collection.json -e environment.json
 
   deploy-to-production:
     runs-on: ubuntu-latest
@@ -105,34 +110,23 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      - name: Commit and push changes to GitOps repository
+      - name: Commit changes to a new branch
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git add values_production.yml
-          git commit -m "Update production values with version $version"
-          git push origin main
-
-      - name: Fetch latest changes from remote repository
-        run: git fetch origin
-
-      - name: Merge remote changes into local branch
-        run: git merge origin/main --no-edit
-
-      - name: Create branch for pull request
-        run: |
-          git checkout -b update-production-values
-          git push origin update-production-values
+         git config --global user.email "github-actions@github.com"
+         git config --global user.name "github-actions"
+         git checkout -b deploy-${{ github.run_number }}
+         git add values_production.yml
+         git commit -m "Deploy $version to production"
+         git push origin deploy-${{ github.run_number }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          branch: update-production-values
-          title: "Update production values with version $version"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Deploy $version to production"
+          title: "Deploy $version to production"
           body: |
-            This pull request updates the production values with the latest version from staging.
-            Please review and merge to deploy to production.
-  
+            This pull request is automatically generated to deploy version $version to production.
+          labels: "automated-deployment"
+          reviewers: Trojka2000
 
-      
