@@ -96,7 +96,7 @@ jobs:
       - name: Checkout GitOps repository
         uses: actions/checkout@v4
         with:
-          repository: mr-quacki/ArgoCD_GitOps
+          repository: ${{ github.actor }}/ArgoCD_GitOps
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
@@ -105,23 +105,17 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      - name: Set git config for user
+      - name: Commit and push changes to GitOps repository
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
 
-      - name: Pull latest changes from remote repository
-        run: |
-          git fetch origin
-          git pull --ff-only origin update-production-values
-
       - name: Create branch for pull request
         run: |
-          git branch update-production-values
-          git checkout update-production-values
+          git checkout -b update-production-values
           git add values_production.yml
           git commit -m "Update production values with version $version"
-          git push --set-upstream origin update-production-values
+          git push origin update-production-values
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -132,3 +126,4 @@ jobs:
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+      
