@@ -31,7 +31,7 @@ jobs:
       - name: deine mudda
         run:
          npm install -g newman
-         newman run ../src/test/tests/system/tests.json
+         newman run ./src/test/tests/system/tests.json
 
   deploy-to-staging-and-run-further-tests:
     runs-on: ubuntu-latest
