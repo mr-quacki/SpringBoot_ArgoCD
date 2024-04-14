@@ -113,7 +113,7 @@ jobs:
       - name: Erstelle Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           title: Update production-people-api.yml
           body: |
             Dieser Pull Request enthält Aktualisierungen für das Produktions-Deployment.
