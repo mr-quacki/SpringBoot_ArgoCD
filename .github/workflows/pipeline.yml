@@ -100,21 +100,25 @@ jobs:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
-      - name: Get staging version
+      - name: Update image tag with version from staging in production values.yml
         run: |
-          staging_version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
-          echo "::set-output name=staging_version::$staging_version"
+          version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
+          sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      - name: Update production values
+      - name: Create branch for pull request
         run: |
-          sed -i "s/tag: .*/tag: ${{ steps.GetVersion.outputs.staging_version }}/" values_production.yml
+          git checkout -b update-production-values
+          git add values_production.yml
+          git commit -m "Update production values with version $version"
+          git push origin update-production-values
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: update-production-values
-          title: "Update production values with latest staging version"
+          title: "Update production values with version $version"
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+  
