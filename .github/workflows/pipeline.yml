@@ -105,6 +105,11 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
+      - name: Set git config for user
+        run: |
+          git config user.email "you@example.com"
+          git config user.name "Your Name"
+
       - name: Create branch for pull request
         run: |
           git checkout -b update-production-values
