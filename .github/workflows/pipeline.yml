@@ -84,6 +84,7 @@ jobs:
 
       - name: Run system tests
         run: |
+          run: chmod +x newman
           npm install -g newman
           newman run ../src/test/tests/system/tests.json
           # Add the execution of further tests here 
