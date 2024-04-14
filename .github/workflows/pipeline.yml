@@ -84,7 +84,7 @@ jobs:
 
       - name: Run system tests
         run: |
-          newman run newman run W:/347/13.4.24/SpringBoot_ArgoCD/src/test/tests/system/tests.json
+          newman run W:/347/13.4.24/SpringBoot_ArgoCD/src/test/tests/system/tests.json
           # Add the execution of further tests here 
           # You may use Newman for system testing
           # Example:
