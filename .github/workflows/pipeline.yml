@@ -94,28 +94,24 @@ jobs:
         # Example:
         # newman run collection.json -e environment.json
 
-  deploy-to-production:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout GitOps repository
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.actor }}/ArgoCD_GitOps
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          ref: main
-
-      - name: Update image tag with version from staging in production values.yml
+      - name: Commit and push changes to GitOps repository
         run: |
-          version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
-          sed -i "s/tag: .*/tag: $version/" values_production.yml
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+        # git add values_production.yml
+        # git commit --allow-empty -m "Deploy $version to production"
+      - name: Notify other GitHub user
+        run: echo "Bitte überprüfe den erstellten Pull Request und führe ihn bei Genehmigung aus."
 
-      - name: Erstelle Pull Request
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: Update production-people-api.yml
+          commit-message: "Deploy $version to production"
+          title: "Deploy $version to production"
           body: |
-            Dieser Pull Request enthält Aktualisierungen für das Produktions-Deployment.
-            Bitte überprüfen und zusammenführen, wenn alles gut aussieht.
+            This pull request is automatically generated to deploy version $version to production.
+          labels: "automated-deployment"
           reviewers: Trojka2000
+
+
