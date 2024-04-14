@@ -112,7 +112,10 @@ jobs:
 
       - name: Pull latest changes from remote branch
         run: |
-          git pull origin main --rebase
+          git pull origin main --rebase || true
+
+      - name: Create branch for pull request
+        run: |
           git checkout -b update-production-values
           git add values_production.yml
           git commit -m "Update production values with version $version"
@@ -127,3 +130,4 @@ jobs:
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+  
