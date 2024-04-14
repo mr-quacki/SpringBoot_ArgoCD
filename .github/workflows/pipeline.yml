@@ -110,12 +110,23 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      - name: Commit and push changes to GitOps repository
+      - name: Commit changes to a new branch
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git add values_production.yml
-          git commit --allow-empty -m "Deploy $version to production"
-          git push
-  
+         git config --global user.email "github-actions@github.com"
+         git config --global user.name "github-actions"
+         git checkout -b deploy-${{ github.run_number }}
+         git add values_production.yml
+         git commit -m "Deploy $version to production"
+         git push origin deploy-${{ github.run_number }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Deploy $version to production"
+          title: "Deploy $version to production"
+          body: |
+            This pull request is automatically generated to deploy version $version to production.
+          labels: "automated-deployment"
+          reviewers: Trojka2000
 
