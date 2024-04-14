@@ -110,15 +110,13 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
 
-      - name: Create branch for pull request
+      - name: Pull latest changes from remote branch
         run: |
+          git pull origin main --rebase
           git checkout -b update-production-values
           git add values_production.yml
           git commit -m "Update production values with version $version"
-          git pull origin main
           git push origin update-production-values
-          # If the above command fails, try force push
-          # git push --force origin update-production-values
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
