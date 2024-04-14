@@ -89,10 +89,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Statuscode ist 400\", function () {\r",
-							"    pm.response.to.have.status(400);\r",
-							"});\r",
-							""
+							"pm.test(\"Response enthält erwartete Felder\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"name\");\r",
+							"    pm.expect(jsonData).to.have.property(\"age\");\r",
+							"    pm.expect(jsonData).to.have.property(\"count\");\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {}
