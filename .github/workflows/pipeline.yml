@@ -110,6 +110,11 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
 
+      - name: Pull latest changes from remote repository
+        run: |
+          git fetch origin
+          git pull origin update-production-values
+
       - name: Create branch for pull request
         run: |
           git branch update-production-values
