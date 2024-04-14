@@ -117,7 +117,7 @@ jobs:
         run: git fetch origin
 
       - name: Merge remote changes into local branch
-        run: git merge origin/main
+        run: git merge origin/main --no-edit
 
       - name: Create branch for pull request
         run: |
@@ -128,11 +128,11 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          ref: https://github.com/mr-quacki/ArgoCD_GitOps
           branch: update-production-values
           title: "Update production values with version $version"
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+  
 
       
