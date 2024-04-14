@@ -115,15 +115,9 @@ jobs:
           git checkout -b update-production-values
           git add values_production.yml
           git commit -m "Update production values with version $version"
-
-      - name: Pull latest changes from remote branch
-        run: |
-          git pull origin update-production-values --allow-unrelated-histories || true
-
-      - name: Push branch to GitOps repository
-        run: |
+          git pull origin main
           git push origin update-production-values
-          # In case the above command fails, try force push
+          # If the above command fails, try force push
           # git push --force origin update-production-values
 
       - name: Create Pull Request
