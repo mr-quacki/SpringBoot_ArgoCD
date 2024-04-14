@@ -113,7 +113,7 @@ jobs:
       - name: Pull latest changes from remote repository
         run: |
           git fetch origin
-          git pull origin update-production-values
+          git pull --ff-only origin update-production-values
 
       - name: Create branch for pull request
         run: |
