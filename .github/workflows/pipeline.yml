@@ -119,6 +119,7 @@ jobs:
           git checkout -b update-production-values
           git add values_production.yml
           git commit -m "Update production values with version $version"
+          git pull origin update-production-values --allow-unrelated-histories || true
           git push origin update-production-values
 
       - name: Create Pull Request
@@ -130,4 +131,5 @@ jobs:
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+  
   
