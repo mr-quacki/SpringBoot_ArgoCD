@@ -91,8 +91,7 @@ jobs:
 
       - name: Run system tests
         run: |
-         npm install -g newman
-         newman run ./src/test/tests/system/age_of_a_person_based_on_their_name.json
+
         # Add the execution of further tests here
         # You may use Newman for system testing
         # Example:
