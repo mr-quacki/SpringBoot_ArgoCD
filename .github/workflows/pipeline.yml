@@ -112,6 +112,6 @@ jobs:
           body: |
             This pull request is automatically generated to deploy version $version to production.
           labels: "automated-deployment"
-          reviewers: "Trojka2000"
+          reviewers: Trojka2000
 
 
