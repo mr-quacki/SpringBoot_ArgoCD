@@ -121,6 +121,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+          ref: https://github.com/mr-quacki/ArgoCD_GitOps
           branch: update-production-values
           title: "Update production values with version $version"
           body: |
