@@ -110,27 +110,19 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      - name: Set up Git configuration
+      - name: Commit and push changes to GitOps repository
         run: |
-          if ! git config --global --get user.email; then
-            git config --global user.email "github-actions@github.com"
-          fi
+         git config --global user.email "github-actions@github.com"
+         git config --global user.name "github-actions"
+         git add production-people-api.yml
+         git commit --allow-empty -m "Update production-people-api.yml"
+         git push
 
-      - name: Create and push new branch
-        run: |
-          git checkout -b deploy-${{ github.run_number }}
-          git add .
-          git commit -m "Deploy $version to production"
-          git push origin deploy-${{ github.run_number }}
-
-      - name: Create Pull Request
+      - name: Erstelle Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Deploy $version to production"
-          title: "Deploy $version to production"
+          title: Update production-people-api.yml
           body: |
-            This pull request is automatically generated to deploy version $version to production.
-          labels: "automated-deployment"
-          reviewers: Trojka2000
-
+            Dieser Pull Request enthält Aktualisierungen für das Produktions-Deployment.
+            Bitte überprüfen und zusammenführen, wenn alles gut aussieht.
