@@ -82,8 +82,10 @@ jobs:
           # Example:
           # argocd app wait <APP_NAME> --timeout 300
 
-      - name: Run system tests
+      - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Run system tests
         run: |
           npm install -g newman
           newman run tests.json
