@@ -110,6 +110,13 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
 
+      - name: Create branch for pull request
+        run: |
+          git checkout -b update-production-values
+          git add values_production.yml
+          git commit -m "Update production values with version $version"
+          git push origin update-production-values
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
@@ -119,3 +126,4 @@ jobs:
           body: |
             This pull request updates the production values with the latest version from staging.
             Please review and merge to deploy to production.
+      
