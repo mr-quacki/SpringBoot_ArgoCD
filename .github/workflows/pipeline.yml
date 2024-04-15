@@ -116,17 +116,5 @@ jobs:
          git config --global user.name "github-actions"
          git add values_production.yml
          git commit --allow-empty -m "Deploy $version to production"
-         git push origin main
+         git push
 
-      - name: Notify other GitHub user
-        run: echo "Bitte überprüfe den erstellten Pull Request und führe ihn bei Genehmigung aus."
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-         token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-         commit-message: "Deploy $version to production"
-         title: "Deploy $version to production"
-         body: |
-          This pull request is automatically generated to deploy version $version to production.
-         labels: "automated-deployment"
