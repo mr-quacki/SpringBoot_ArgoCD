@@ -112,7 +112,14 @@ jobs:
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
 
-      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+          title: "Deploy $version to production"
+          body: |
+            This pull request deploys the latest changes to production.
+            Please review and merge.
 
       - name: Commit and push changes to GitOps repository
         run: |
@@ -122,12 +129,5 @@ jobs:
           git commit --allow-empty -m "Deploy $version to production"
           git push
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: "Deploy $version to production"
-          body: |
-            This pull request deploys the latest changes to production.
-            Please review and merge. 
+       
          
