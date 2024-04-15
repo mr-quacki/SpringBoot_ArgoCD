@@ -126,4 +126,4 @@ jobs:
          body: |
           This pull request deploys the latest changes to production.
           Please review and merge.
-          assignees: https://github.com/Trojka2000
+        assignees: https://github.com/Trojka2000
