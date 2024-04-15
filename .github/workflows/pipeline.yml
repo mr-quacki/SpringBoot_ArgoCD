@@ -105,21 +105,10 @@ jobs:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: "Deploy $version to production"
-          body: |
-            This pull request deploys the latest changes to production.
-            Please review and merge.
-
       - name: Update image tag with version from staging in production values.yml
         run: |
           version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
           sed -i "s/tag: .*/tag: $version/" values_production.yml
-
-      
 
       - name: Commit and push changes to GitOps repository
         run: |
@@ -129,5 +118,12 @@ jobs:
           git commit --allow-empty -m "Deploy $version to production"
           git push
           
-
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+          title: "Deploy $version to production"
+          body: |
+            This pull request deploys the latest changes to production.
+            Please review and merge.
          
