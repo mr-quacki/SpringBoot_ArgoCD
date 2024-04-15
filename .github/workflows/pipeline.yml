@@ -98,27 +98,12 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: "Deploy $version to production"
-          body: |
-            This pull request deploys the latest changes to production.
-            Please review and merge.
-        
-        
-
       - name: Checkout GitOps repository
         uses: actions/checkout@v4
         with:
           repository: ${{ github.actor }}/ArgoCD_GitOps
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
-
-
-
 
       - name: Update image tag with version from staging in production values.yml
         run: |
@@ -134,6 +119,13 @@ jobs:
           git add values_production.yml
           git commit --allow-empty -m "Deploy $version to production"
           git push
+          
 
-       
-         
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+          title: "Deploy $version to production"
+          body: |
+            This pull request deploys the latest changes to production.
+            Please review and merge.   
