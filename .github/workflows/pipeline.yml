@@ -105,14 +105,14 @@ jobs:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: "Deploy $version to production"
-          body: |
-             This pull request deploys the latest changes to production.
-             Please review and merge.
+      #- name: Create Pull Request
+       # uses: peter-evans/create-pull-request@v3
+       # with:
+       #   token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+       #   title: "Deploy $version to production"
+       #   body: |
+       #      This pull request deploys the latest changes to production.
+       #      Please review and merge.
 
 
       - name: Update image tag with version from staging in production values.yml
