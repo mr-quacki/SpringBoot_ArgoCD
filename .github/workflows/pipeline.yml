@@ -106,7 +106,7 @@ jobs:
           ref: main
 
       - name: Create Pull Request
-        uses: actions/create-pull-request@v3
+        uses: ArgoCD_GitOps/create-pull-request@v3
         with:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           title: "Deploy $version to production"
