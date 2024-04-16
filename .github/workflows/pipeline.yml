@@ -106,9 +106,15 @@ jobs:
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           ref: main
 
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Deploy $version to production"
+          body: |
+            This pull request is generated automatically to deploy version $version to production. Please review and approve.
+            commit-message: "Deploy $version to production"
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
 
-
-        if: github.event.pull_request.merged == true && github.event.pull_request.user.login != github.actor
 
       - name: Update image tag with version from staging in production values.yml
         run: |
