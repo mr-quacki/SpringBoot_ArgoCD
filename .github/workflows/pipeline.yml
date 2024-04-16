@@ -107,7 +107,15 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
-
+        with:
+          title: "Deploy $version to production"
+          body: |
+            This pull request is generated automatically to deploy version $version to production. Please review and approve.
+            commit-message: "Deploy $version to production"
+          branch: main
+          branch-suffix: deploy-to-production
+          reviewers: dackiqacki
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update image tag with version from staging in production values.yml
         run: |
