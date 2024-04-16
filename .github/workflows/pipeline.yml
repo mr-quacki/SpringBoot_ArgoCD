@@ -112,7 +112,7 @@ jobs:
           body: |
             This pull request is generated automatically to deploy version $version to production. Please review and approve.
             commit-message: "Deploy $version to production"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
 
       - name: Update image tag with version from staging in production values.yml
         run: |
