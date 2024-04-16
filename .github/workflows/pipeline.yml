@@ -106,13 +106,8 @@ jobs:
           ref: main
 
       - name: Create Pull Request
-        uses: mr-quacki/ArgoCD_GitOps
-        with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
-          title: "Deploy $version to production"
-          body: |
-            This pull request deploys the latest changes to production.
-            Please review and merge.
+        uses: peter-evans/create-pull-request@v3
+
 
       - name: Update image tag with version from staging in production values.yml
         run: |
