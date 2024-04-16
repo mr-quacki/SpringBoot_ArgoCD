@@ -106,15 +106,31 @@ jobs:
           ref: main
 
       - name: Create Pull Request
-        uses: actions/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
           title: "Deploy $version to production"
           body: |
-            This pull request deploys the latest changes to production.
-            Please review and merge.
+            This pull request is generated automatically to deploy version $version to production. Please review and approve.
+            commit-message: "Deploy $version to production"
+          branch: main
+          branch-suffix: deploy-to-production
+          reviewers: dackiqacki
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update image tag with version from staging in production values.yml
+        run: |
+          version=$(grep 'tag:' values_staging.yml | awk '{print $2}')
+          sed -i "s/tag: .*/tag: $version/" values_production.yml
 
       
+
+      - name: Commit and push changes to GitOps repository
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add values_production.yml
+          git commit --allow-empty -m "Deploy $version to production"
+          git push
           
 
          
