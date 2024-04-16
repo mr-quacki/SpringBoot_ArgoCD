@@ -103,7 +103,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ github.actor }}/ArgoCD_GitOps
-          token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+
           ref: main
 
       - name: Create Pull Request
