@@ -109,11 +109,6 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          title: "Deploy $version to production"
-          body: |
-            This pull request is generated automatically to deploy version $version to production. Please review and approve.
-            commit-message: "Deploy $version to production"
-          reviewers: dackiqacki
           token: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
 
 
